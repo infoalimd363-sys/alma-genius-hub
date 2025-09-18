@@ -1,30 +1,37 @@
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginForm } from "@/components/auth/LoginForm";
-import { useToast } from "@/hooks/use-toast";
+import { SignupForm } from "@/components/auth/SignupForm";
+import { useAuth } from "@/hooks/useAuth";
 
 const Login = () => {
+  const [isSignup, setIsSignup] = useState(false);
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const { signIn, user } = useAuth();
 
-  const handleLogin = (email: string, password: string) => {
-    // This will be replaced with actual Supabase auth
-    console.log("Login attempt:", { email, password });
-    
-    // Simulate successful login
-    toast({
-      title: "Login Successful",
-      description: "Welcome back!",
-    });
-    
-    // Navigate to dashboard
-    navigate("/dashboard");
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard");
+    }
+  }, [user, navigate]);
+
+  const handleLogin = async (email: string, password: string) => {
+    await signIn(email, password);
   };
 
   const handleSignupClick = () => {
-    navigate("/signup");
+    setIsSignup(true);
   };
 
-  return <LoginForm onLogin={handleLogin} onSignupClick={handleSignupClick} />;
+  const handleLoginClick = () => {
+    setIsSignup(false);
+  };
+
+  return isSignup ? (
+    <SignupForm onLoginClick={handleLoginClick} />
+  ) : (
+    <LoginForm onLogin={handleLogin} onSignupClick={handleSignupClick} />
+  );
 };
 
 export default Login;

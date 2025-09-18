@@ -15,7 +15,7 @@ interface HeaderProps {
   userName: string;
   userRole: UserRole;
   onMenuClick: () => void;
-  onLogout: () => void;
+  onLogout: () => Promise<void>;
 }
 
 export const Header = ({ userName, userRole, onMenuClick, onLogout }: HeaderProps) => {

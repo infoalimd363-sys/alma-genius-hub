@@ -4,17 +4,17 @@ import { Sidebar } from "@/components/layout/Sidebar";
 import { StudentDashboard } from "@/components/dashboard/StudentDashboard";
 import { TeacherDashboard } from "@/components/dashboard/TeacherDashboard";
 import { AdminDashboard } from "@/components/dashboard/AdminDashboard";
-import { UserRole } from "@/types";
+import { useAuth } from "@/hooks/useAuth";
 
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  // This will be replaced with actual auth state from Supabase
-  const [userRole] = useState<UserRole>("student");
-  const userName = "John Doe";
+  const { profile, signOut } = useAuth();
+  
+  const userRole = profile?.role || "student";
+  const userName = profile?.full_name || "User";
 
-  const handleLogout = () => {
-    // Implement logout logic
-    console.log("Logging out...");
+  const handleLogout = async () => {
+    await signOut();
   };
 
   const renderDashboard = () => {
