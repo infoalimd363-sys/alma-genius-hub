@@ -8,6 +8,7 @@ import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import Schedule from "./pages/Schedule";
 import { AttendanceTracker } from "./components/attendance/AttendanceTracker";
 import { TaskManager } from "./components/tasks/TaskManager";
 import NotFound from "./pages/NotFound";
@@ -42,6 +43,11 @@ const App = () => (
             <Route path="/routine" element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/schedule" element={
+              <ProtectedRoute>
+                <Schedule />
               </ProtectedRoute>
             } />
             <Route path="/grades" element={

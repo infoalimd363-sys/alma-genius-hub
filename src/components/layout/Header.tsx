@@ -82,7 +82,12 @@ export const Header = ({ userName, userRole, onMenuClick, onLogout }: HeaderProp
             <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-accent animate-pulse" />
           </Button>
           
-          <Button variant="ghost" size="icon">
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={() => navigate('/schedule')}
+            title="View Schedule"
+          >
             <Calendar className="h-5 w-5" />
           </Button>
 
