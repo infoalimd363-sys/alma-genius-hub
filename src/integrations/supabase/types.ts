@@ -16,8 +16,10 @@ export type Database = {
     Tables: {
       attendance: {
         Row: {
+          check_in_method: string | null
           check_in_time: string | null
           check_out_time: string | null
+          class_id: string | null
           created_at: string
           date: string
           id: string
@@ -28,8 +30,10 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          check_in_method?: string | null
           check_in_time?: string | null
           check_out_time?: string | null
+          class_id?: string | null
           created_at?: string
           date: string
           id?: string
@@ -40,8 +44,10 @@ export type Database = {
           user_id: string
         }
         Update: {
+          check_in_method?: string | null
           check_in_time?: string | null
           check_out_time?: string | null
+          class_id?: string | null
           created_at?: string
           date?: string
           id?: string
@@ -72,6 +78,7 @@ export type Database = {
         Row: {
           academic_year: string | null
           created_at: string
+          exam_type: string | null
           grade: string
           id: string
           max_marks: number | null
@@ -85,6 +92,7 @@ export type Database = {
         Insert: {
           academic_year?: string | null
           created_at?: string
+          exam_type?: string | null
           grade: string
           id?: string
           max_marks?: number | null
@@ -98,6 +106,7 @@ export type Database = {
         Update: {
           academic_year?: string | null
           created_at?: string
+          exam_type?: string | null
           grade?: string
           id?: string
           max_marks?: number | null
@@ -127,34 +136,79 @@ export type Database = {
       }
       profiles: {
         Row: {
+          class_id: string | null
           created_at: string
           department: string | null
           email: string | null
+          enrollment_date: string | null
           full_name: string | null
           id: string
           phone: string | null
+          profile_pic: string | null
           role: Database["public"]["Enums"]["user_role"]
+          student_id: string | null
           updated_at: string
         }
         Insert: {
+          class_id?: string | null
           created_at?: string
           department?: string | null
           email?: string | null
+          enrollment_date?: string | null
           full_name?: string | null
           id: string
           phone?: string | null
+          profile_pic?: string | null
           role?: Database["public"]["Enums"]["user_role"]
+          student_id?: string | null
           updated_at?: string
         }
         Update: {
+          class_id?: string | null
           created_at?: string
           department?: string | null
           email?: string | null
+          enrollment_date?: string | null
           full_name?: string | null
           id?: string
           phone?: string | null
+          profile_pic?: string | null
           role?: Database["public"]["Enums"]["user_role"]
+          student_id?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      reports: {
+        Row: {
+          created_at: string
+          data: Json | null
+          file_url: string | null
+          generated_at: string
+          generated_by: string
+          id: string
+          report_type: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          data?: Json | null
+          file_url?: string | null
+          generated_at?: string
+          generated_by: string
+          id?: string
+          report_type: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          data?: Json | null
+          file_url?: string | null
+          generated_at?: string
+          generated_by?: string
+          id?: string
+          report_type?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -165,9 +219,11 @@ export type Database = {
           end_time: string
           id: string
           is_active: boolean | null
+          location: string | null
           room: string | null
           start_time: string
           subject: string | null
+          type: string | null
           updated_at: string
           user_id: string
         }
@@ -177,9 +233,11 @@ export type Database = {
           end_time: string
           id?: string
           is_active?: boolean | null
+          location?: string | null
           room?: string | null
           start_time: string
           subject?: string | null
+          type?: string | null
           updated_at?: string
           user_id: string
         }
@@ -189,9 +247,11 @@ export type Database = {
           end_time?: string
           id?: string
           is_active?: boolean | null
+          location?: string | null
           room?: string | null
           start_time?: string
           subject?: string | null
+          type?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -205,10 +265,44 @@ export type Database = {
           },
         ]
       }
+      settings: {
+        Row: {
+          created_at: string
+          id: string
+          language: string | null
+          notification_preference: string | null
+          privacy_controls: Json | null
+          theme: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          language?: string | null
+          notification_preference?: string | null
+          privacy_controls?: Json | null
+          theme?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          language?: string | null
+          notification_preference?: string | null
+          privacy_controls?: Json | null
+          theme?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       tasks: {
         Row: {
           assigned_by: string | null
           assigned_to: string
+          category: string | null
           completed_at: string | null
           created_at: string
           description: string | null
@@ -222,6 +316,7 @@ export type Database = {
         Insert: {
           assigned_by?: string | null
           assigned_to: string
+          category?: string | null
           completed_at?: string | null
           created_at?: string
           description?: string | null
@@ -235,6 +330,7 @@ export type Database = {
         Update: {
           assigned_by?: string | null
           assigned_to?: string
+          category?: string | null
           completed_at?: string | null
           created_at?: string
           description?: string | null
