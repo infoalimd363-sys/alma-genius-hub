@@ -10,6 +10,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Schedule from "./pages/Schedule";
 import Attendance from "./pages/Attendance";
+import Grades from "./pages/Grades";
 import { TaskManager } from "./components/tasks/TaskManager";
 import NotFound from "./pages/NotFound";
 
@@ -52,7 +53,7 @@ const App = () => (
             } />
             <Route path="/grades" element={
               <ProtectedRoute>
-                <Dashboard />
+                <Grades />
               </ProtectedRoute>
             } />
             <Route path="/mark-attendance" element={

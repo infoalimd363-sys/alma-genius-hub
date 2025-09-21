@@ -81,7 +81,9 @@ export const gradesService = {
 
     if (!data || data.length === 0) {
       return {
-        average: 0,
+        averagePercentage: 0,
+        totalMarks: 0,
+        maxPossibleMarks: 0,
         subjects: {},
         totalGrades: 0
       };
@@ -95,22 +97,17 @@ export const gradesService = {
     const subjects: any = {};
     data.forEach(grade => {
       if (!subjects[grade.subject]) {
-        subjects[grade.subject] = { score: 0, maxScore: 0, count: 0 };
+        subjects[grade.subject] = { obtained: 0, total: 0, count: 0 };
       }
-      subjects[grade.subject].score += grade.obtained_marks || 0;
-      subjects[grade.subject].maxScore += grade.max_marks || 0;
+      subjects[grade.subject].obtained += grade.obtained_marks || 0;
+      subjects[grade.subject].total += grade.max_marks || 0;
       subjects[grade.subject].count++;
     });
 
-    Object.keys(subjects).forEach(subject => {
-      const subjectData = subjects[subject];
-      subjects[subject].average = subjectData.maxScore > 0 
-        ? Math.round((subjectData.score / subjectData.maxScore) * 100) 
-        : 0;
-    });
-
     return {
-      average,
+      averagePercentage: average,
+      totalMarks: totalScore,
+      maxPossibleMarks: totalMaxScore,
       subjects,
       totalGrades: data.length
     };
