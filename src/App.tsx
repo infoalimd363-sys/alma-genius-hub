@@ -9,7 +9,7 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Schedule from "./pages/Schedule";
-import { AttendanceTracker } from "./components/attendance/AttendanceTracker";
+import Attendance from "./pages/Attendance";
 import { TaskManager } from "./components/tasks/TaskManager";
 import NotFound from "./pages/NotFound";
 
@@ -32,7 +32,7 @@ const App = () => (
             } />
             <Route path="/attendance" element={
               <ProtectedRoute>
-                <AttendanceTracker />
+                <Attendance />
               </ProtectedRoute>
             } />
             <Route path="/tasks" element={
