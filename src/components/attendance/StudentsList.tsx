@@ -17,8 +17,9 @@ interface Student {
   email: string;
   student_id: string;
   profile_pic?: string;
+  aadhaar_number?: string;
   attendance?: {
-    status: 'present' | 'absent' | 'late' | 'excused';
+    status: 'present' | 'absent' | 'late' | 'excused' | 'half_day';
     check_in_time?: string;
   };
 }

@@ -4,7 +4,7 @@ export const attendanceService = {
   // Mark attendance for a user
   async markAttendance(
     userId: string,
-    status: 'present' | 'absent' | 'late' | 'excused',
+    status: 'present' | 'absent' | 'late' | 'excused' | 'half_day',
     checkInMethod?: 'qr' | 'manual' | 'proximity' | 'facial',
     classId?: string
   ) {
@@ -73,11 +73,16 @@ export const attendanceService = {
       absent: data.filter(a => a.status === 'absent').length,
       late: data.filter(a => a.status === 'late').length,
       excused: data.filter(a => a.status === 'excused').length,
-      percentage: 0
+      halfDay: data.filter(a => a.status === 'half_day').length,
+      percentage: 0,
+      effectiveDays: 0
     };
 
+    // Calculate effective days (half-day = 0.5)
+    stats.effectiveDays = stats.present + stats.late + (stats.halfDay * 0.5);
+    
     if (stats.total > 0) {
-      stats.percentage = Math.round(((stats.present + stats.late) / stats.total) * 100);
+      stats.percentage = Math.round((stats.effectiveDays / stats.total) * 100);
     }
 
     return stats;

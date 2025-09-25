@@ -9,9 +9,11 @@ interface AuthContextType {
   session: Session | null;
   profile: any | null;
   loading: boolean;
-  signUp: (email: string, password: string, fullName: string, role?: string) => Promise<void>;
+  signUp: (email: string, password: string, fullName: string, role?: string, aadhaarNumber?: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
+  signInWithAadhaar: (aadhaarNumber: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -70,23 +72,31 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string, fullName: string, role: string = "student") => {
+  const signUp = async (email: string, password: string, fullName: string, role: string = "student", aadhaarNumber?: string) => {
     try {
       const redirectUrl = `${window.location.origin}/`;
       
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
           emailRedirectTo: redirectUrl,
           data: {
             full_name: fullName,
-            role: role
+            role: role,
+            aadhaar_number: aadhaarNumber
           }
         }
       });
 
       if (error) throw error;
+
+      // Update profile with Aadhaar if provided
+      if (data.user && aadhaarNumber) {
+        await supabase.from('profiles').update({
+          aadhaar_number: aadhaarNumber
+        }).eq('id', data.user.id);
+      }
 
       toast({
         title: "Success!",
@@ -127,6 +137,43 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const signInWithAadhaar = async (aadhaarNumber: string, password: string) => {
+    try {
+      // First get the email associated with this Aadhaar
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('email')
+        .eq('aadhaar_number', aadhaarNumber)
+        .single();
+
+      if (profileError || !profileData?.email) {
+        throw new Error("No account found with this Aadhaar number");
+      }
+
+      // Sign in with the email
+      const { error } = await supabase.auth.signInWithPassword({
+        email: profileData.email,
+        password,
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Welcome back!",
+        description: "You have successfully logged in with Aadhaar.",
+      });
+
+      navigate("/dashboard");
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+      throw error;
+    }
+  };
+
   const signOut = async () => {
     try {
       const { error } = await supabase.auth.signOut();
@@ -147,6 +194,28 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const resetPassword = async (email: string) => {
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Password reset email sent",
+        description: "Please check your email for the password reset link.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+      throw error;
+    }
+  };
+
   return (
     <AuthContext.Provider value={{
       user,
@@ -155,7 +224,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       loading,
       signUp,
       signIn,
+      signInWithAadhaar,
       signOut,
+      resetPassword,
     }}>
       {children}
     </AuthContext.Provider>

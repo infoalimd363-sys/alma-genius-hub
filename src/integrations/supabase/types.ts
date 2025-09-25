@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      achievements: {
+        Row: {
+          badge_name: string
+          badge_type: string
+          description: string | null
+          earned_at: string
+          id: string
+          points: number | null
+          user_id: string
+        }
+        Insert: {
+          badge_name: string
+          badge_type: string
+          description?: string | null
+          earned_at?: string
+          id?: string
+          points?: number | null
+          user_id: string
+        }
+        Update: {
+          badge_name?: string
+          badge_type?: string
+          description?: string | null
+          earned_at?: string
+          id?: string
+          points?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       attendance: {
         Row: {
           check_in_method: string | null
@@ -73,6 +103,75 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      attendance_logs: {
+        Row: {
+          attendance_id: string
+          change_reason: string | null
+          changed_by: string
+          created_at: string
+          id: string
+          new_status: Database["public"]["Enums"]["attendance_status"] | null
+          old_status: Database["public"]["Enums"]["attendance_status"] | null
+        }
+        Insert: {
+          attendance_id: string
+          change_reason?: string | null
+          changed_by: string
+          created_at?: string
+          id?: string
+          new_status?: Database["public"]["Enums"]["attendance_status"] | null
+          old_status?: Database["public"]["Enums"]["attendance_status"] | null
+        }
+        Update: {
+          attendance_id?: string
+          change_reason?: string | null
+          changed_by?: string
+          created_at?: string
+          id?: string
+          new_status?: Database["public"]["Enums"]["attendance_status"] | null
+          old_status?: Database["public"]["Enums"]["attendance_status"] | null
+        }
+        Relationships: []
+      }
+      daily_routines: {
+        Row: {
+          created_at: string
+          day_of_week: number
+          description: string | null
+          id: string
+          is_active: boolean | null
+          time_slot: string
+          title: string
+          type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          day_of_week: number
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          time_slot: string
+          title: string
+          type?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          day_of_week?: number
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          time_slot?: string
+          title?: string
+          type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       grades: {
         Row: {
@@ -134,8 +233,39 @@ export type Database = {
           },
         ]
       }
+      notifications: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean | null
+          message: string
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message: string
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message?: string
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
+          aadhaar_number: string | null
           class_id: string | null
           created_at: string
           department: string | null
@@ -143,6 +273,7 @@ export type Database = {
           enrollment_date: string | null
           full_name: string | null
           id: string
+          notification_preferences: Json | null
           phone: string | null
           profile_pic: string | null
           role: Database["public"]["Enums"]["user_role"]
@@ -150,6 +281,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          aadhaar_number?: string | null
           class_id?: string | null
           created_at?: string
           department?: string | null
@@ -157,6 +289,7 @@ export type Database = {
           enrollment_date?: string | null
           full_name?: string | null
           id: string
+          notification_preferences?: Json | null
           phone?: string | null
           profile_pic?: string | null
           role?: Database["public"]["Enums"]["user_role"]
@@ -164,6 +297,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          aadhaar_number?: string | null
           class_id?: string | null
           created_at?: string
           department?: string | null
@@ -171,6 +305,7 @@ export type Database = {
           enrollment_date?: string | null
           full_name?: string | null
           id?: string
+          notification_preferences?: Json | null
           phone?: string | null
           profile_pic?: string | null
           role?: Database["public"]["Enums"]["user_role"]
@@ -366,7 +501,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      attendance_status: "present" | "absent" | "late" | "excused"
+      attendance_status: "present" | "absent" | "late" | "excused" | "half_day"
       task_priority: "low" | "medium" | "high"
       task_status: "pending" | "in_progress" | "completed"
       user_role: "student" | "teacher" | "admin"
@@ -497,7 +632,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      attendance_status: ["present", "absent", "late", "excused"],
+      attendance_status: ["present", "absent", "late", "excused", "half_day"],
       task_priority: ["low", "medium", "high"],
       task_status: ["pending", "in_progress", "completed"],
       user_role: ["student", "teacher", "admin"],
